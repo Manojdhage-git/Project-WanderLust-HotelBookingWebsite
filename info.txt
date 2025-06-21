@@ -1,0 +1,12 @@
+step 1 - setup, database initilization..
+//
+step 2 - model : Listing - place(apartment, hotel, room)
+create Model ----
+title - string
+description - string
+image -url-string
+price -number
+location - string
+country - string
+
+//
