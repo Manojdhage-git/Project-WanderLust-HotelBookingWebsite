@@ -19,4 +19,9 @@ app.get("/testListing", async (req,res)=>{
         country:"India"
     });
 
+    await sampleListing.save();
+    console.log("sample was send");
+    res.send("success testing");
+})
+
 //
