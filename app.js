@@ -30,7 +30,7 @@ app.use(express.static(path.join(__dirname,"/public")));
 
 //Home route
 app.get("/", (req, res) => {
-    res.send("Welcome to WanderLust Hotel Booking!");
+    res.render("listings/home.ejs");
 });
 
 
