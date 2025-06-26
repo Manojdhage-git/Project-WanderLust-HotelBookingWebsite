@@ -4,16 +4,18 @@ const Schema = mongoose.Schema;
 const listingSchema = new Schema({
     title: {
         type: String,
-        required: true,
+  
 
     },
     description: {
         type: String,
+
     },
     image: {
         filename: {
             type: String,
-            default: "default.jpg"
+            default: "default.jpg",
+
         },
         url: {
             type: String,
@@ -21,9 +23,18 @@ const listingSchema = new Schema({
         }
     }
     ,
-    price: Number,
-    location: String,
-    country: String,
+    price: {
+        type: Number,
+     
+    },
+    location: {
+        type: String,
+    
+    },
+    country: {
+        type: String,
+     
+    }
 });
 
 const Listing = mongoose.model("Listing", listingSchema);
