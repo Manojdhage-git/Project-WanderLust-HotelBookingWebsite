@@ -55,7 +55,9 @@ app.get("/listings/new",(req,res)=>{
 
 //Create route
 app.post("/listings",wrapAsync(async(req,res,next)=>{
-
+    if(!req.body.listing){
+        throw new ExpressError(400,"Send Valid data for list")
+    }
     const newListing=new Listing(req.body.listing);
     await newListing.save();
     res.redirect("/listings");
@@ -104,7 +106,8 @@ app.all(/.*/, (req, res, next) => {
 
 app.use((err,req,res,next)=>{
     let {statusCode=500, message="Something went wrong"}=err;
-        res.status(statusCode).send(message);
+        // res.status(statusCode).send(message);
+        res.status(statusCode).render("error.ejs",{message});
 });
 
 
