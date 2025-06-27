@@ -7,6 +7,7 @@ const methodOverride=require("method-override");
 const ejsMate=require("ejs-mate"); 
 const wrapAsync=require("./Utils/wrapAsync.js")
 const ExpressError=require("./Utils/ExpressError.js")
+const {listingSchema}=require("./schema.js")
 
 const MONGO_URL="mongodb://127.0.0.1:27017/wanderlust";
 
@@ -35,7 +36,17 @@ app.get("/", (req, res) => {
     res.render("listings/home.ejs");
 });
 
+//validations for schema in the form of middlewarew
+const validateListing=(req,res,next)=>{
+    let {error}=listingSchema.validate(req.body);
 
+    if(error){
+        throw new ExpressError(400,result.error);
+    }else{
+        next();
+    }
+
+}
 
 //index route to show data or listings
 
@@ -54,11 +65,30 @@ app.get("/listings/new",(req,res)=>{
 })
 
 //Create route
-app.post("/listings",wrapAsync(async(req,res,next)=>{
-    if(!req.body.listing){
-        throw new ExpressError(400,"Send Valid data for list")
-    }
+app.post("/listings",validateListing,wrapAsync(async(req,res,next)=>{
+//      let result=listingSchema.validate(req.body);
+
+// if(result.error){
+//     throw new ExpressError(400,result.error)
+// }
+    
+    // if(!req.body.listing){
+    //     throw new ExpressError(400,"Send Valid data for list")
+    // }
+
     const newListing=new Listing(req.body.listing);
+     
+    
+    // if(!newListing.title){
+    //     throw new ExpressError(400,"title is missing");
+    // }
+    // if(!newListing.description){
+    //     throw new ExpressError(400,"Description is missing");
+    // }
+    //  if(!newListing.location){
+    //     throw new ExpressError(400,"location is missing");
+    // }
+
     await newListing.save();
     res.redirect("/listings");
 }));
@@ -83,7 +113,7 @@ app.get("/listings/:id/edit",wrapAsync(async (req,res)=>{
 }));
 
 //update route
-app.put("/listings/:id",wrapAsync(async(req,res)=>{
+app.put("/listings/:id",validateListing,wrapAsync(async(req,res)=>{
     let {id}=req.params;
     await Listing.findByIdAndUpdate(id,{...req.body.listing});
     res.redirect(`/listings/${id}`);
