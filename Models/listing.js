@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const listingSchema = new Schema({
     title: {
         type: String,
-  
+
 
     },
     description: {
@@ -25,15 +25,21 @@ const listingSchema = new Schema({
     ,
     price: {
         type: Number,
-     
+
     },
     location: {
         type: String,
-    
+
     },
     country: {
         type: String,
-     
+
+    },
+
+    reviews: {
+        type: Schema.Types.ObjectId,
+        
+
     }
 });
 

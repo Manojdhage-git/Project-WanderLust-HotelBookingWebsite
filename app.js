@@ -1,7 +1,7 @@
 const express=require("express");
 const app=express();
 const mongoose=require("mongoose");
-const Listing=require("../Project-WanderLust-HotelBookingWebsite/Modules/listing")
+const Listing=require("../Project-WanderLust-HotelBookingWebsite/Models/listing")
 const path=require("path");
 const methodOverride=require("method-override");
 const ejsMate=require("ejs-mate"); 
