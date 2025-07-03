@@ -8,7 +8,7 @@ const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync");
 const ExpressError = require("./Utils/ExpressError.js")
 const { listingSchema, reviewSchema } = require("./schema.js")
-const Review = require("./models/Review.js")
+const Review = require("./Models/review.js")
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
 
@@ -152,6 +152,14 @@ app.post("/listings/:id/reviews", validateReview, wrapAsync(async (req, res) => 
     console.log("New review saved:", newReview);
     res.redirect(`/listings/${listing._id}`);
 }));
+
+//DELETE REVIEW ROUTE
+app.delete("/listings/:id/reviews/:reviewId",wrapAsync(async(req,res)=>{
+let{id,reviewId}=req.params;
+Listing.findByIdAndUpdate(id,{$pull:{reviews:reviewId}});
+await Review.findByIdAndDelete(reviewId);
+res.redirect(`/listings/${id}`);
+}))
 
 // More explicit pattern matching:
 app.all(/.*/, (req, res, next) => {
