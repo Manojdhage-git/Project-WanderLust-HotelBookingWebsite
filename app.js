@@ -50,7 +50,7 @@ app.use("/listings",listings);
 app.use("/listings/:id", reviews);
 
 
-// More explicit pattern matching:
+// More explicit pattern matching
 app.all(/.*/, (req, res, next) => {
     next(new ExpressError(404, "page not found!"));
 });
@@ -64,5 +64,5 @@ app.use((err, req, res, next) => {
 
 
 app.listen(8080, () => {
-    console.log("Server is listening to port 8080");
+    console.log("listening to port 8080");
 });
