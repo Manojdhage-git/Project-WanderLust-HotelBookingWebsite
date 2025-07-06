@@ -8,7 +8,7 @@ const ExpressError = require("./Utils/ExpressError.js")
 const listings = require("./routes/listing.js")
 const reviews = require("./routes/review.js");
 const session = require("express-session");
-
+const flash=require("connect-flash");
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
 
@@ -49,16 +49,17 @@ const sessionOptions = {
 };
 
 app.use(session(sessionOptions));
-
-
-
+app.use(flash());
 
 //Home route
 app.get("/", (req, res) => {
     res.render("listings/home.ejs");
 });
 
-
+app.use((req,res,next)=>{
+res.locals.success=req.flash("success");
+next();
+})
 
 
 app.use("/listings", listings);
