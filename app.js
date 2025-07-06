@@ -48,18 +48,24 @@ const sessionOptions = {
     }
 };
 
+
+
 app.use(session(sessionOptions));
 app.use(flash());
+
+app.use((req, res, next) => {
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+
+  
+  next();
+});
+
 
 //Home route
 app.get("/", (req, res) => {
     res.render("listings/home.ejs");
 });
-
-app.use((req,res,next)=>{
-res.locals.success=req.flash("success");
-next();
-})
 
 
 app.use("/listings", listings);
