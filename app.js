@@ -86,14 +86,14 @@ app.get("/", (req, res) => {
 
 
 //demo for authentication
-app.get("/demouser",async(req,res)=>{
-    let fakeUser=new User({
-        email:"abc@gmail.com",
-        username:"delta-student"
-    });
-  let registeredUser= await User.register(fakeUser,"helloworld");
-  res.send(registeredUser);
-})
+// app.get("/demouser",async(req,res)=>{
+//     let fakeUser=new User({
+//         email:"abc@gmail.com",
+//         username:"delta-student"
+//     });
+//   let registeredUser= await User.register(fakeUser,"helloworld");
+//   res.send(registeredUser);
+// })
 
 
 app.use("/listings", listingsRouter);
