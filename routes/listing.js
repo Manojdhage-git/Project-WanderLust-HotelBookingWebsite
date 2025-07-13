@@ -4,7 +4,7 @@ const wrapAsync = require("../utils/wrapAsync");
 const { listingSchema} = require("../schema.js")
 const ExpressError = require("../Utils/ExpressError.js")
 const Listing = require("../Models/listing.js")
-const {isLoggedIn}=require("../middleware.js");
+const {isLoggedIn,isOwner}=require("../middleware.js");
 
 //validations for schema in the form of middlewarew
 const validateListing = (req, res, next) => {
@@ -38,7 +38,7 @@ router.get("/new",isLoggedIn ,(req, res) => {
 })
 
 //Create route
-router.post("/", validateListing, wrapAsync(async (req, res, next) => {
+router.post("/",isLoggedIn, validateListing, wrapAsync(async (req, res, next) => {
     //      let result=listingSchema.validate(req.body);
 
     // if(result.error){
@@ -50,6 +50,7 @@ router.post("/", validateListing, wrapAsync(async (req, res, next) => {
     // }
 
     const newListing = new Listing(req.body.listing);
+    newListing.owner=req.user._id;
 
 
     // if(!newListing.title){
@@ -73,7 +74,8 @@ router.post("/", validateListing, wrapAsync(async (req, res, next) => {
 
 router.get("/:id", wrapAsync(async (req, res) => {
     let { id } = req.params;
-    const listing = await Listing.findById(id).populate("reviews");
+    const listing = await Listing.findById(id).populate("reviews").populate("owner");
+    console.log(listing.owner);
 
     if (!listing) {
         req.flash('error', "The listing you requested does not exist.");
@@ -92,13 +94,15 @@ router.get("/:id/edit",isLoggedIn, wrapAsync(async (req, res) => {
         req.flash('error', "The listing you requested does not exist.");
        return res.redirect("/listings"); 
     }
+     console.log("Listing loaded for edit:", listing); 
     res.render("listings/edit.ejs", { listing })
 
 }));
 
 //update route
-router.put("/:id",isLoggedIn, validateListing, wrapAsync(async (req, res) => {
+router.put("/:id",isLoggedIn,isOwner, validateListing, wrapAsync(async (req, res) => {
     let { id } = req.params;
+   
     await Listing.findByIdAndUpdate(id, { ...req.body.listing });
     req.flash("success","New Listing Updated!")
     res.redirect(`/listings/${id}`);
