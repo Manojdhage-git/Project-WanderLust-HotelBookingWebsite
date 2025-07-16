@@ -6,6 +6,8 @@ const { reviewSchema } = require("../schema.js")
 const Review = require("../Models/review.js");
 const Listing = require("../Models/listing.js")
 
+const reviewController=require("../controllers/reviews.js");
+
 //validate schema
 const validateReview = (req, res, next) => {
     let { error } = reviewSchema.validate(req.body);
@@ -19,24 +21,9 @@ const validateReview = (req, res, next) => {
 }
 
 //REVIEW POST ROUTE
-router.post("/reviews", validateReview, wrapAsync(async (req, res) => {
-    let listing = await Listing.findById(req.params.id);
-    let newReview = new Review(req.body.review);
-    listing.reviews.push(newReview);
-    await newReview.save();
-    await listing.save();
-    req.flash("success","New review Created!")
-    console.log("New review saved:", newReview);
-    res.redirect(`/listings/${listing._id}`);
-}));
+router.post("/reviews", validateReview, wrapAsync(reviewController.createReview));
 
 //DELETE REVIEW ROUTE
-router.delete("/reviews/:reviewId",wrapAsync(async(req,res)=>{
-let{id,reviewId}=req.params;
-Listing.findByIdAndUpdate(id,{$pull:{reviews:reviewId}});
-req.flash("success","New Review Deleted!")
-await Review.findByIdAndDelete(reviewId);
-res.redirect(`/listings/${id}`);
-}))
+router.delete("/reviews/:reviewId",wrapAsync(reviewController.destroyReview));
 
 module.exports=router;
