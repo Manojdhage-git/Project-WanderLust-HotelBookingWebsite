@@ -2,7 +2,8 @@ const express=require("express");
 const router=express.Router();
 const wrapAsync = require("../utils/wrapAsync");
 const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
+const {storage}=require("../cloudConfig.js")
+const upload = multer({ storage});
 
 const Listing = require("../Models/listing.js")
 const {isLoggedIn,isOwner,validateListing}=require("../middleware.js");
