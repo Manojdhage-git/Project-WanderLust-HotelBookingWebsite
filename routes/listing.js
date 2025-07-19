@@ -1,6 +1,8 @@
 const express=require("express");
 const router=express.Router();
 const wrapAsync = require("../utils/wrapAsync");
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
 
 const Listing = require("../Models/listing.js")
 const {isLoggedIn,isOwner,validateListing}=require("../middleware.js");
@@ -12,7 +14,10 @@ router.route("/")
 //index route to show data or listings
 .get(wrapAsync(listingController.index))
 //Create route
-.post(isLoggedIn, validateListing, wrapAsync(listingController.createListing));
+// .post(isLoggedIn, validateListing, wrapAsync(listingController.createListing));
+.post(upload.single("listing[image]"),(req,res)=>{
+    res.send(req.file);
+})
 
 
 

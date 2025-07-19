@@ -7,7 +7,7 @@
                 <h3>Create New Listing</h3>
 
                 <!-- Form with Bootstrap validation -->
-                <form method="POST" action="/listings" class="needs-validation" novalidate>
+                <form method="POST" action="/listings" class="needs-validation" novalidate enctype="multipart/form-data">
                     <div class="mb-3">
                         <label for="title" class="form-label">Title</label>
                         <input name="listing[title]" id="title" placeholder="Enter title" type="text"
@@ -31,9 +31,10 @@
                         </div>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="image" class="form-label">Image</label>
-                        <input name="listing[image]" id="image" placeholder="Enter image url" type="url"
+                
+                          <div class="mb-3">
+                        <label for="image" class="form-label">Upload Listing Image</label>
+                        <input name="listing[image]" id="image" type="file"
                             class="form-control">
                     </div>
 
