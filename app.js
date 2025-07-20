@@ -86,13 +86,6 @@ app.use((req, res, next) => {
   next();
 });
 
-
-//Home route
-app.get("/", (req, res) => {
-    res.render("listings/home.ejs");
-});
-
-
 //demo for authentication
 // app.get("/demouser",async(req,res)=>{
 //     let fakeUser=new User({
